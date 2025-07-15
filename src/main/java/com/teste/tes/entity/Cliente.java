@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.OffsetTime;
 
 @Entity
 @Table(name = "Cliente")
@@ -29,7 +30,7 @@ public class Cliente {
 
     @Column(nullable = false)
     @Schema(description = "Horário marcado para o início do corte", example = "09:10")
-    private LocalTime inicioDoCorte;
+    private OffsetTime inicioDoCorte;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -94,11 +95,11 @@ public class Cliente {
         this.diaParaCorte = diaParaCorte;
     }
 
-    public LocalTime getInicioDoCorte() {
+    public OffsetTime getInicioDoCorte() {
         return inicioDoCorte;
     }
 
-    public void setInicioDoCorte(LocalTime inicioDoCorte) {
+    public void setInicioDoCorte(OffsetTime inicioDoCorte) {
         this.inicioDoCorte = inicioDoCorte;
     }
 

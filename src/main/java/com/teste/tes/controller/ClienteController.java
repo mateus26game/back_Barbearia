@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -125,6 +126,36 @@ public class ClienteController {
         List<Cliente> clientes = clienteService.listarPorStatusServico(statusServico);
         return ResponseEntity.ok(clientes);
     }
+
+
+    @GetMapping("/nota-fiscal/{id}")
+    public ResponseEntity<byte[]> gerarNota(@PathVariable Long id) throws IOException {
+        byte[] pdf = clienteService.gerarNotaFiscal(id);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "inline; filename=nota_fiscal_" + id + ".pdf")
+                .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+
+        @GetMapping("/Todas-nota-fiscal")
+        public ResponseEntity<byte[]> gerarTodasNota() throws IOException {
+            byte[] pdf = clienteService.gerarTodasNotaFiscal();
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "inline; filename=notas_fiscais.pdf")
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(pdf);
+        }
+
+
+    @GetMapping("/cortes-hoje")
+    public ResponseEntity<List<Cliente>> listarCortesDeHoje() {
+        List<Cliente> clientes = clienteService.listarCortesDeHoje();
+        return ResponseEntity.ok(clientes);
+    }
+
 
 
 }
