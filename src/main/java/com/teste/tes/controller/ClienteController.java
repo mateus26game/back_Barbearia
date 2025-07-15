@@ -94,4 +94,37 @@ public class ClienteController {
         clienteService.remover(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @Operation(
+            summary = "Listar clientes filtrando por status de pagamento",
+            description = "Retorna clientes que já pagaram ou não pagaram, baseado no valor passado",
+            tags = {"Cliente"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista filtrada retornada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro inválido")
+    })
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Cliente>> listarPorStatus(@RequestParam(required = false) String statusPagamento) {
+        List<Cliente> clientes = clienteService.listarPorStatusPagamento(statusPagamento);
+        return ResponseEntity.ok(clientes);
+    }
+
+    @Operation(
+            summary = "Listar clientes filtrando por status de serviço",
+            description = "Retorna clientes com serviço FINALIZADO ou ESPERADO",
+            tags = {"Cliente"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista filtrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro inválido")
+    })
+    @GetMapping("/filtrar-status-servico")
+    public ResponseEntity<List<Cliente>> listarPorStatusServico(@RequestParam(required = false) String statusServico) {
+        List<Cliente> clientes = clienteService.listarPorStatusServico(statusServico);
+        return ResponseEntity.ok(clientes);
+    }
+
+
 }
