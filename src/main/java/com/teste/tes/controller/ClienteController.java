@@ -6,6 +6,9 @@ import com.teste.tes.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -155,6 +158,19 @@ public class ClienteController {
         List<Cliente> clientes = clienteService.listarCortesDeHoje();
         return ResponseEntity.ok(clientes);
     }
+
+    @GetMapping(value = "/cortes-hojepdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> gerarPdfDosCortesDeHoje() throws IOException {
+        byte[] pdf = clienteService.cortesDoDiaParaCorte(); // ✅ Usa o método que gera o PDF certo
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=cortes-hoje.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+
+
 
 
 

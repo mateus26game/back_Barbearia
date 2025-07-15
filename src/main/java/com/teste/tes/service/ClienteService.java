@@ -186,4 +186,36 @@ public class ClienteService {
     }
 
 
+    public byte[] cortesDoDiaParaCorte() throws IOException {
+        List<Cliente> clientes = listarCortesDeHoje();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(out);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+        // Título centralizado
+        Paragraph tituloGeral = new Paragraph("CORTES DO DIA")
+                .setFont(fontBold)
+                .setFontSize(18)
+                .setTextAlignment(TextAlignment.CENTER);
+        document.add(tituloGeral);
+        document.add(new Paragraph("\n"));
+
+        for (Cliente cliente : clientes) {
+            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
+            document.add(new Paragraph("Cliente: " + cliente.getNome()+ "    |    Data do Corte: " + cliente.getDiaParaCorte()+"    |    Horário: " + cliente.getInicioDoCorte()));
+            document.add(new Paragraph("Status do pagamento: " + cliente.getStatusPagamento()+ "    |    Valor: R$ " + cliente.getPrecoBarbearia() + "    |    Serviço: " + cliente.getTipoServico()));
+        }
+        document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
+
+        // Rodapé ou observação
+        document.add(new Paragraph("Gerado automaticamente por MY BARBEARIA").setTextAlignment(TextAlignment.CENTER));
+
+        // Fechar documento e retornar
+        document.close();
+        return out.toByteArray();
+    }
+
 }
